@@ -1,13 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
-
-from kitchen.forms import DishForm
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
+from django.contrib.auth import logout
+from kitchen.forms import DishForm, RegistrationForm, LoginForm, UserPasswordChangeForm, \
+    UserPasswordResetForm, UserSetPasswordForm, CookUpdateForm
 from kitchen.models import Cook, Ingredient, DishType, Dish
 
+from django.shortcuts import render
 
-# Create your views here.
 
 def index(request):
     """View function for the home page of the site."""
@@ -107,3 +111,77 @@ class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Dish
     success_url = reverse_lazy("kitchen:dish-list")
     template_name = "kitchen/dish_delete.html"
+
+class CookListView(LoginRequiredMixin, generic.ListView):
+    model = Cook
+    paginate_by = 5
+
+
+class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Cook
+    form_class = CookUpdateForm
+    template_name = "kitchen/cook_update_form.html"
+
+
+class CookDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Cook
+
+
+class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Cook
+    template_name = "kitchen/cook_delete.html"
+    success_url = reverse_lazy("kitchen:cook-list")
+
+
+@login_required
+def toggle_assign_to_car(request, pk):
+    cooks = Cook.objects.get(id=request.user.id)
+    if (
+        Dish.objects.get(id=pk) in cooks.prepared_dishes.all()
+    ):
+        cooks.prepared_dishes.remove(pk)
+    else:
+        cooks.prepared_dishes.add(pk)
+    return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            print("Account created successfully!")
+            form.save()
+            return redirect('/accounts/login/')
+        else:
+            print("Registration failed!")
+    else:
+        form = RegistrationForm()
+
+    context = {'form': form}
+    return render(request, 'registration/accounts/sign-up.html', context)
+
+
+class UserLoginView(LoginView):
+    form_class = LoginForm
+    template_name = 'registration/accounts/sign-in.html'
+
+
+class UserPasswordChangeView(PasswordChangeView):
+    template_name = 'registration/accounts/pas++sword-change.html'
+    form_class = UserPasswordChangeForm
+
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'registration/accounts/forgot-password.html'
+    form_class = UserPasswordResetForm
+
+
+class UserPasswrodResetConfirmView(PasswordResetConfirmView):
+    template_name = 'registration/accounts/reset-password.html'
+    form_class = UserSetPasswordForm
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('/accounts/login/')
