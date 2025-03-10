@@ -54,3 +54,29 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = DishType
     success_url = reverse_lazy("kitchen:dish_type-list")
     template_name = "kitchen/dishtype_delete.html"
+
+class IngredientListView(LoginRequiredMixin, generic.ListView):
+    model = Ingredient
+    context_object_name = "ingredient_list"
+    template_name = "kitchen/ingredient_list.html"
+    paginate_by = 7
+
+
+class IngredientCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Ingredient
+    fields = "__all__"
+    success_url = reverse_lazy("kitchen:ingredients-list")
+    template_name = "kitchen/ingredient_form.html"
+
+
+class IngredientUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Ingredient
+    fields = "__all__"
+    success_url = reverse_lazy("kitchen:ingredients-list")
+    template_name = "kitchen/ingredient_form.html"
+
+
+class IngredientDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Ingredient
+    success_url = reverse_lazy("kitchen:ingredients-list")
+    template_name = "kitchen/ingredient_delete.html"
