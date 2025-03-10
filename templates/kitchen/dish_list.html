@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Dish list
+    {% if request.user.years_of_experience >= 2 %}
+      <a href="{% url 'kitchen:dish-create' %}" class="btn btn-primary link-to-page">
+        Create
+      </a>
+    {% endif %}
+  </h1>
+  <br>
+  {% if dish_list %}
+    <div class="grid-container">
+        {% for dish in dish_list %}
+            <div class="grid-item">
+                <a href="{% url 'kitchen:dish-detail' pk=dish.id %}">
+                  {% if dish.image %}
+                    <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                  {% else %}
+                    <img src="https://png.pngtree.com/thumb_back/fw800/background/20230610/pngtree-picture-of-a-blue-bird-on-a-black-background-image_2937385.jpg" alt="{{ dish.name }}">
+                  {% endif %}
+                </a>
+                <p><a href="{% url 'kitchen:dish-detail' pk=dish.id %}">{{ dish.name }}</a></p>
+            </div>
+        {% endfor %}
+    </div>
+  {% else %}
+    <p>There are no dishes in the restaurant</p>
+  {% endif %}
+{% endblock %}
