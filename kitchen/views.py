@@ -7,7 +7,7 @@ from django.views import generic
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.auth import logout
 from kitchen.forms import DishForm, RegistrationForm, LoginForm, UserPasswordChangeForm, \
-    UserPasswordResetForm, UserSetPasswordForm, CookUpdateForm
+    UserPasswordResetForm, UserSetPasswordForm, CookUpdateForm, DishTypeSearchForm, IngredientSearchForm, DishSearchForm
 from kitchen.models import Cook, Ingredient, DishType, Dish
 
 from django.shortcuts import render
@@ -41,6 +41,22 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
     template_name = "kitchen/Dish_type_list.html"
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DishTypeListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+
+        context["search_form"] = DishTypeSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = Ingredient.objects.all()
+
+        form = DishTypeSearchForm(self.request.GET)
+        if form.is_valid():
+            queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
+
+        return queryset
+
 
 class DishTypeCreateView(LoginRequiredMixin, generic.CreateView):
     model = DishType
@@ -66,6 +82,27 @@ class IngredientListView(LoginRequiredMixin, generic.ListView):
     template_name = "kitchen/ingredient_list.html"
     paginate_by = 7
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(IngredientListView, self).get_context_data(**kwargs)
+        # Получаем параметр 'name' из запроса
+        name = self.request.GET.get("name", "")
+
+        # Передаем форму с предварительным значением для поиска
+        context["search_form"] = IngredientSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        # Инициализируем queryset без использования select_related
+        queryset = Ingredient.objects.all()  # Здесь предполагается, что 'Dish' имеет поле 'name'
+
+        # Создаем форму и проверяем, если она валидна
+        form = IngredientSearchForm(self.request.GET)
+        if form.is_valid():
+            # Фильтруем объекты по полю 'name' с использованием 'icontains'
+            queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
+
+        return queryset
+
 
 class IngredientCreateView(LoginRequiredMixin, generic.CreateView):
     model = Ingredient
@@ -90,6 +127,27 @@ class DishListView(LoginRequiredMixin, generic.ListView):
     model = Dish
     paginate_by = 15
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DishListView, self).get_context_data(**kwargs)
+        # Получаем параметр 'name' из запроса
+        name = self.request.GET.get("name", "")
+
+        # Передаем форму с предварительным значением для поиска
+        context["search_form"] = DishSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        # Инициализируем queryset без использования select_related
+        queryset = Dish.objects.all()  # Здесь предполагается, что 'Dish' имеет поле 'name'
+
+        # Создаем форму и проверяем, если она валидна
+        form = DishSearchForm(self.request.GET)
+        if form.is_valid():
+            # Фильтруем объекты по полю 'name' с использованием 'icontains'
+            queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
+
+        return queryset
+
 
 class DishDetailView(LoginRequiredMixin, generic.DetailView):
     model = Dish
@@ -99,6 +157,14 @@ class DishCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = DishForm
     template_name = 'kitchen/dish_form.html'
     success_url = reverse_lazy("kitchen:dish-list")
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        if 'image' in self.request.FILES:
+            self.object.image = self.request.FILES['image']
+        self.object.save()
+        form.save_m2m()  # Для ManyToMany
+        return super().form_valid(form)
 
 
 class DishUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -121,6 +187,10 @@ class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Cook
     form_class = CookUpdateForm
     template_name = "kitchen/cook_update_form.html"
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(self.request.path)
 
 
 class CookDetailView(LoginRequiredMixin, generic.DetailView):

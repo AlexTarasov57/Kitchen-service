@@ -25,8 +25,8 @@ class Cook(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.first_name or ''} {self.last_name or ''})"
 
-    # def get_absolute_url(self):
-    #     return reverse("kitchen:cook-detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse("kitchen:cook-detail", kwargs={"pk": self.pk})
 
 
 class Ingredient(models.Model):
