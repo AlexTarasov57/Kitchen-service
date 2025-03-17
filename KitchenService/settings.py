@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'kitchen.experience_middleware.ExperienceMiddleware',
 ]
 
 ROOT_URLCONF = 'KitchenService.urls'

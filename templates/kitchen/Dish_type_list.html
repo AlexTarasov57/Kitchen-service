@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{#{% load crispy_forms_filters %}#}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <div class="d-flex justify-content-between align-items-center">
@@ -11,7 +11,7 @@
     {% endif %}
   </div>
   <br>
-  {% if dishtype_list %}
+  {% if dish_type_list %}
     <div class="card shadow">
       <div class="card-body">
         <div class="table-responsive">
@@ -28,37 +28,37 @@
             </thead>
             <tbody>
 
-              {% for dishtype in dishtype_list %}
+              {% for dish_type in dish_type_list %}
                 <tr>
                   <td class="border-0">
                     <div class="d-flex align-items-center">
-                      <span class="fw-bold">{{ dishtype.id }}</span>
+                      <span class="fw-bold">{{ dish_type.id }}</span>
                     </div>
                   </td>
                   <td class="border-0">
-                      {{ dishtype.name }}
+                      {{ dish_type.name }}
                   </td>
                   {% if request.user.years_of_experience >= 2 %}
                     <td class="border-0">
                       <div class="col-lg-4">
                         <!-- Button Modal -->
-                        <button type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#modal-form-{{ dishtype.id }}">Update</button>
-          
+                        <button type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#modal-form-{{ dish_type.id }}">Update</button>
+
                         <!-- Modal Content -->
-                        <div class="modal fade" id="modal-form-{{ dishtype.id }}" tabindex="-1" role="dialog" aria-labelledby="modal-form-{{ dishtype.id }}" aria-hidden="true">
+                        <div class="modal fade" id="modal-form-{{ dish_type.id }}" tabindex="-1" role="dialog" aria-labelledby="modal-form-{{ dish_type.id }}" aria-hidden="true">
                           <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                               <div class="modal-body p-0">
                                 <div class="card p-3 p-lg-4">
                                   <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                                   <div class="text-center text-md-center mb-4 mt-md-0">
-                                    <h1 class="mb-0 h4">Update Ingredient</h1>
+                                    <h1 class="mb-0 h4">Update Dish type</h1>
                                   </div>
-                                  <form action="{% url 'kitchen:dish_type-update' pk=dishtype.id %}" method="post">
+                                  <form action="{% url 'kitchen:dish_type-update' pk=dish_type.id %}" method="post">
                                     {% csrf_token %}
                                     <div class="form-group mb-4">
-                                      <label for="name">Ingredient Name</label>
-                                      <input type="text" name="name" class="form-control" value="{{ dishtype.name }}" required>
+                                      <label for="name">Dish type Name</label>
+                                      <input type="text" name="name" class="form-control" value="{{ dish_type.name }}" required>
                                     </div>
                                     <div class="d-grid">
                                       <button type="submit" class="btn btn-gray-800">Update</button>
@@ -74,20 +74,20 @@
                     </td>
                     <td class="border-0">
                       <div class="col-lg-4">
-                        <button type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#modal-default-{{ dishtype.id }}">
+                        <button type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#modal-default-{{ dish_type.id }}">
                           Delete
                         </button>
                         <!-- Modal Content -->
-                        <div class="modal fade" id="modal-default-{{ dishtype.id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-{{ dishtype.id }}" aria-hidden="true">
+                        <div class="modal fade" id="modal-default-{{ dish_type.id }}" tabindex="-1" role="dialog" aria-labelledby="modal-default-{{ dish_type.id }}" aria-hidden="true">
                           <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                               <div class="modal-body p-0">
                                 <div class="card p-3 p-lg-4">
                                   <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                                   <div class="text-center text-md-center mb-4 mt-md-0">
-                                    <h1 class="mb-0 h4">Delete dish type {{ dishtype.name }}?</h1>
+                                    <h1 class="mb-0 h4">Delete dish type {{ dish_type.name }}?</h1>
                                   </div>
-                                  <form action="{% url 'kitchen:dish_type-delete' pk=dishtype.id %}" method="post">
+                                  <form action="{% url 'kitchen:dish_type-delete' pk=dish_type.id %}" method="post">
                                     {% csrf_token %}
                                   <div class="d-grid">
                                     <input type="submit" value="Yes, Delete" class="btn btn-danger">

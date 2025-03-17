@@ -1,8 +1,13 @@
+from datetime import timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.db.models import Count
+from django.db.models.functions import TruncDate
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import generic
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.auth import logout
@@ -12,6 +17,23 @@ from kitchen.models import Cook, Ingredient, DishType, Dish
 
 from django.shortcuts import render
 
+def model_count(request):
+    # Получаем количество моделей, созданных за последние 30 дней
+    end_date = timezone.now()
+    start_date = end_date - timedelta(days=30)
+
+    # Группируем по датам
+    data = Dish.objects.filter(created_at__range=[start_date, end_date]) \
+        .annotate(day=TruncDate('created_at')) \
+        .values('day') \
+        .annotate(count=Count('id')) \
+        .order_by('day')
+
+    # Форматируем данные для графика
+    labels = [item['day'].strftime('%Y-%m-%d') for item in data]
+    counts = [item['count'] for item in data]
+
+    return JsonResponse({'labels': labels, 'counts': counts})
 
 def index(request):
     """View function for the home page of the site."""
@@ -37,7 +59,7 @@ def index(request):
 
 class DishTypeListView(LoginRequiredMixin, generic.ListView):
     model = DishType
-    context_object_name = "dishtype_list"
+    context_object_name = "dish_type_list"
     template_name = "kitchen/Dish_type_list.html"
     paginate_by = 5
 
@@ -49,7 +71,7 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Ingredient.objects.all()
+        queryset = DishType.objects.all()
 
         form = DishTypeSearchForm(self.request.GET)
         if form.is_valid():
@@ -237,7 +259,7 @@ class UserLoginView(LoginView):
 
 
 class UserPasswordChangeView(PasswordChangeView):
-    template_name = 'registration/accounts/pas++sword-change.html'
+    template_name = 'registration/accounts/password-change.html'
     form_class = UserPasswordChangeForm
 
 

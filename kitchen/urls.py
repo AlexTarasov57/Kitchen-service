@@ -9,9 +9,13 @@ from kitchen.views import (
     IngredientDeleteView, DishListView, DishDetailView, DishCreateView, DishUpdateView, DishDeleteView, CookListView,
     CookDetailView, CookDeleteView, toggle_assign_to_car, register_view, UserLoginView,
     logout_view, UserPasswordChangeView, UserPasswordResetView, UserPasswrodResetConfirmView, CookUpdateView,
+    model_count,
 )
+
+
 urlpatterns = [
     path("", index, name="index"),
+    path("api/model-count/", model_count, name="model_count"),
     path(
         "dishtype/",
         DishTypeListView.as_view(),
@@ -102,6 +106,7 @@ path(
         CookDeleteView.as_view(),
         name="cook-delete"
     ),
+
     path('accounts/register/', register_view, name="register"),
     path('accounts/login/', UserLoginView.as_view(), name="login"),
     path('accounts/logout/', logout_view, name="logout"),
@@ -120,3 +125,5 @@ path(
         template_name='registration/accounts/password-reset-complete.html'
     ), name='password_reset_complete'),
 ]
+
+app_name = "kitchen"

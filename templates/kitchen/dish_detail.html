@@ -55,11 +55,13 @@
     {% endfor %}
   </div>
   <h2>Dish type: {{ dish.dish_type.name }}</h2>
-    {% if dish.image %}
-        <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
-    {% else %}
-        <p>Изображение отсутствует</p>
-    {% endif %}
+    <div class="grid-container">
+      {% if dish.image %}
+          <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+      {% else %}
+          <p>Изображение отсутствует</p>
+      {% endif %}
+    </div>
   <hr>
   <ul>
     {% for cooks in dish.cooks.all %}
