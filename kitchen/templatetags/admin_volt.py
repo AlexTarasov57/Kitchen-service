@@ -5,7 +5,6 @@ Copyright (c) 2019 - present AppSeed.us
 import re
 from django import template
 from django.utils.html import format_html
-from kitchen.utils import get_menu_items
 from django.utils.safestring import mark_safe
 from django.contrib.admin.views.main import (PAGE_VAR)
 
@@ -25,9 +24,6 @@ def checkbox(value):
     return res
 
 
-@assignment_tag(takes_context=True)
-def admin_get_menu(context):
-    return get_menu_items(context)
 
 
 @assignment_tag(takes_context=True)

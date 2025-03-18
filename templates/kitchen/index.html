@@ -151,18 +151,18 @@
     </div>
   </div>
   
-    <canvas id="myChart"></canvas> <!-- Контейнер для графика -->
+    <canvas id="myChart"></canvas>
 
     <script>
         async function fetchData() {
             const response = await fetch("/api/model-count/");
             const result = await response.json();
         
-            console.log("Полученные данные:", result); // Проверяем, что приходит от API
+            console.log("Полученные данные:", result);
         
             if (!result || !result.labels || !result.counts) {
                 console.error("Ошибка: данные некорректны!", result);
-                return { labels: [], counts: [] }; // Возвращаем пустые массивы, чтобы не было ошибки
+                return { labels: [], counts: [] };
             }
         
             return { labels: result.labels, counts: result.counts };
@@ -178,7 +178,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Количество моделей',
+                        label: 'Number of models',
                         data: counts,
                         borderColor: 'blue',
                         fill: false
@@ -187,9 +187,9 @@
             });
         }
 
-        renderChart(); // Запускаем при загрузке страницы
+        renderChart(); 
 
-        setInterval(renderChart, 5000); // Обновление каждые 5 секунд
+        setInterval(renderChart, 5000); 
     </script>
 
 {% endblock content %}

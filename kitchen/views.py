@@ -18,18 +18,15 @@ from kitchen.models import Cook, Ingredient, DishType, Dish
 from django.shortcuts import render
 
 def model_count(request):
-    # Получаем количество моделей, созданных за последние 30 дней
     end_date = timezone.now()
     start_date = end_date - timedelta(days=30)
 
-    # Группируем по датам
     data = Dish.objects.filter(created_at__range=[start_date, end_date]) \
         .annotate(day=TruncDate('created_at')) \
         .values('day') \
         .annotate(count=Count('id')) \
         .order_by('day')
 
-    # Форматируем данные для графика
     labels = [item['day'].strftime('%Y-%m-%d') for item in data]
     counts = [item['count'] for item in data]
 
@@ -151,21 +148,16 @@ class DishListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DishListView, self).get_context_data(**kwargs)
-        # Получаем параметр 'name' из запроса
         name = self.request.GET.get("name", "")
 
-        # Передаем форму с предварительным значением для поиска
         context["search_form"] = DishSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
-        # Инициализируем queryset без использования select_related
-        queryset = Dish.objects.all()  # Здесь предполагается, что 'Dish' имеет поле 'name'
+        queryset = Dish.objects.all()
 
-        # Создаем форму и проверяем, если она валидна
         form = DishSearchForm(self.request.GET)
         if form.is_valid():
-            # Фильтруем объекты по полю 'name' с использованием 'icontains'
             queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
 
         return queryset
@@ -185,7 +177,7 @@ class DishCreateView(LoginRequiredMixin, generic.CreateView):
         if 'image' in self.request.FILES:
             self.object.image = self.request.FILES['image']
         self.object.save()
-        form.save_m2m()  # Для ManyToMany
+        form.save_m2m()
         return super().form_valid(form)
 
 
