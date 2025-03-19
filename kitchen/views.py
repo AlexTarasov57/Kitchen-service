@@ -11,8 +11,19 @@ from django.utils import timezone
 from django.views import generic
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.auth import logout
-from kitchen.forms import DishForm, RegistrationForm, LoginForm, UserPasswordChangeForm, \
-    UserPasswordResetForm, UserSetPasswordForm, CookUpdateForm, DishTypeSearchForm, IngredientSearchForm, DishSearchForm
+
+from kitchen.forms import (
+    DishForm,
+    RegistrationForm,
+    LoginForm,
+    UserPasswordChangeForm,
+    UserPasswordResetForm,
+    UserSetPasswordForm,
+    CookUpdateForm,
+    DishTypeSearchForm,
+    IngredientSearchForm,
+    DishSearchForm
+)
 from kitchen.models import Cook, Ingredient, DishType, Dish
 
 from django.shortcuts import render
@@ -103,21 +114,16 @@ class IngredientListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(IngredientListView, self).get_context_data(**kwargs)
-        # Получаем параметр 'name' из запроса
         name = self.request.GET.get("name", "")
 
-        # Передаем форму с предварительным значением для поиска
         context["search_form"] = IngredientSearchForm(initial={"name": name})
         return context
 
     def get_queryset(self):
-        # Инициализируем queryset без использования select_related
-        queryset = Ingredient.objects.all()  # Здесь предполагается, что 'Dish' имеет поле 'name'
+        queryset = Ingredient.objects.all()
 
-        # Создаем форму и проверяем, если она валидна
         form = IngredientSearchForm(self.request.GET)
         if form.is_valid():
-            # Фильтруем объекты по полю 'name' с использованием 'icontains'
             queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
 
         return queryset

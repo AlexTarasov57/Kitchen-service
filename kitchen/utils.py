@@ -1,9 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
-import datetime
 import json
 from django.template import Context
 from django.utils import translation
@@ -28,7 +22,6 @@ from django.utils.text import capfirst
 from django.contrib import messages
 from django.contrib.admin.options import IncorrectLookupParameters
 from django.contrib import admin
-from django.utils.text import slugify
 
 try:
     from django.utils.translation import ugettext_lazy as _
