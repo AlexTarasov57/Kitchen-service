@@ -24,7 +24,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-2d^ht^r%a^dy50
 
 
 # https://docs.djangoproject.com/en/3.0/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kitchen-service-1-jhtu.onrender.com', '127.0.0.1', 'localhost']
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
