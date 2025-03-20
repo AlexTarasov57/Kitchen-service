@@ -1,0 +1,89 @@
+[
+{
+    "model": "kitchen.dishtype",
+    "pk": 1,
+    "fields": {
+        "name": "Pizza5",
+        "created_at": "2025-03-17T17:32:35.676Z"
+    }
+},
+{
+    "model": "kitchen.dishtype",
+    "pk": 2,
+    "fields": {
+        "name": "Ben",
+        "created_at": "2025-03-17T17:32:46.218Z"
+    }
+},
+{
+    "model": "kitchen.cook",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$HdWlOeHmsSbMlfrJYoWNIx$V7z+U9+U1BV+pOgP4Lez5keDzmNcqyGKb/um5ZZ1fiw=",
+        "last_login": "2025-03-17T16:51:24.667Z",
+        "is_superuser": true,
+        "username": "Alex",
+        "first_name": "",
+        "last_name": "",
+        "email": "alex@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-03-13T19:37:25.564Z",
+        "years_of_experience": 5,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "kitchen.cook",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$e3LfRG2KXtY3hAH8qJC0GR$uxGp51XXZgkVSly2u355x/XuuLcHq3wSyZonq0B9294=",
+        "last_login": "2025-03-17T18:33:35.062Z",
+        "is_superuser": false,
+        "username": "test",
+        "first_name": "",
+        "last_name": "",
+        "email": "test@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-03-17T17:52:04.996Z",
+        "years_of_experience": 5,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 1,
+    "fields": {
+        "name": "Pizza4",
+        "created_at": "2025-03-17T17:33:03.903Z"
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 2,
+    "fields": {
+        "name": "Ben45",
+        "created_at": "2025-03-17T17:41:24.210Z"
+    }
+},
+{
+    "model": "kitchen.dish",
+    "pk": 1,
+    "fields": {
+        "name": "поз №1  6322-3910035",
+        "description": "било 29 шт",
+        "dish_type": 2,
+        "image": "images/поз_1__3910035.jpg",
+        "created_at": "2025-03-17T17:36:09.997Z",
+        "cooks": [
+            1
+        ],
+        "ingredients": [
+            1
+        ]
+    }
+}
+]
