@@ -35,5 +35,5 @@ The **Kitchen Service** is a web-based application designed to optimize kitchen 
    git clone https://github.com/AlexTarasov57/Kitchen-service.git
    
 ## Demo
-Проєкт задеплоєний за адресою: [Kitchen Service](https://kitchen-service-1-jhtu.onrender.com)
+The project is deployed at the address: [Kitchen Service](https://kitchen-service-1-jhtu.onrender.com)
 
