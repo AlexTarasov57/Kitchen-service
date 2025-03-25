@@ -37,3 +37,8 @@ The **Kitchen Service** is a web-based application designed to optimize kitchen 
 ## Demo
 The project is deployed at the address: [Kitchen Service](https://kitchen-service-1-jhtu.onrender.com)
 
+## Test User
+   ```bash
+   login: user
+   password: user12345
+
